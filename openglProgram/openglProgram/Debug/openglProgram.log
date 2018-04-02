@@ -1,0 +1,11 @@
+﻿  opglLight.cpp
+c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: “APIENTRY”: 宏重定义
+  e:\opgl\opglpro\thirdpart\include\glfw\glfw3.h(98): note: 参见“APIENTRY”的前一个定义
+e:\opgl\opglpro\openglprogram\openglprogram\src\opgllight.cpp(188): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+e:\opgl\opglpro\openglprogram\openglprogram\src\opgllight.cpp(198): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+e:\opgl\opglpro\openglprogram\openglprogram\src\opgllight.cpp(199): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+e:\opgl\opglpro\openglprogram\openglprogram\src\opgllight.cpp(200): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+e:\opgl\opglpro\openglprogram\openglprogram\src\opgllight.cpp(201): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+e:\opgl\opglpro\openglprogram\openglprogram\src\opgllight.cpp(286): warning C4244: “初始化”: 从“double”转换到“GLfloat”，可能丢失数据
+  openglProgram.vcxproj -> E:\opgl\opglPro\openglProgram\Debug\openglProgram.exe
+  openglProgram.vcxproj -> E:\opgl\opglPro\openglProgram\Debug\openglProgram.pdb (Partial PDB)

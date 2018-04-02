@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\opgl\opglPro\thirdpart\glm\build\CMakeFiles\55551f2024cf98d50389a6be7ff1eb95\uninstall.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\opgl\opglPro\thirdpart\glm\glm-0.9.9-a2\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\opgl\opglPro\thirdpart\glm\build\CMakeFiles\uninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{88CD362A-2012-38E5-B869-DDA1C310E10E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
