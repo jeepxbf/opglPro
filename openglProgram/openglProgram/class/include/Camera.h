@@ -49,7 +49,7 @@ public:
 	Camera(glm::vec3 position,glm::vec3 front);
 	~Camera();
 
-
+	glm::vec3 cameraPosition;
 	void setYaw(GLfloat yaw) { this->yaw = yaw; }
 	void setPitch(GLfloat pitch) { this->pitch = pitch; }
 	void setZoom(GLfloat zoom) { this->zoom = zoom; }
@@ -66,7 +66,7 @@ private:
 	glm::vec3 cameraUp;
 	glm::vec3 cameraRight;
 	glm::vec3 worldUp;
-	glm::vec3 cameraPosition;
+	
 
 	GLfloat yaw;
 	GLfloat pitch;

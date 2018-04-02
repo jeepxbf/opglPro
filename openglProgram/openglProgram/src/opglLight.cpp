@@ -254,6 +254,7 @@ int main(int argc, char **argv)
 	glEnableVertexAttribArray(0);   //location = 0 enable
 	glBindVertexArray(0);   //解绑
 	
+
 	const char* verpath = "Shader/lightcube.vert";
 	const char* flagpath = "Shader/lightcube.frag";
 	Shader* cubeShader = new Shader(verpath, flagpath);
@@ -269,6 +270,9 @@ int main(int argc, char **argv)
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
+	glEnableVertexAttribArray(1);
+
 	glEnable(GL_DEPTH_TEST);
 
 	GLint objectColorLoc = glGetUniformLocation(cubeShader->program, "cubeColor");
@@ -277,7 +281,8 @@ int main(int argc, char **argv)
 	glUniform3f(lightColorLoc, 1.f, 1.f, 1.f);
 	glBindVertexArray(0);
 
-	std::cout << glfwGetTime() << std::endl;
+	const glm::vec3 lightSourcePos(1.f, 0.f, 0.0f);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		//lalalal
@@ -295,7 +300,8 @@ int main(int argc, char **argv)
 
 		cubeShader->use();
 		glm::mat4 model(1);
-		model = glm::rotate(model, glm::radians((GLfloat)glfwGetTime()*50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+		//model = glm::rotate(model, glm::radians((GLfloat)glfwGetTime()*50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-45.0f), glm::vec3(0.f, 1.f, 0.f));
 		glm::mat4 view(1);
 		view = mainCamera.getCamearMatrix();
 		glm::mat4 projection(1);
@@ -304,6 +310,10 @@ int main(int argc, char **argv)
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z); //lightsource position
+		glUniform3f(glGetUniformLocation(cubeShader->program, "viewPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
+		
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
@@ -311,14 +321,15 @@ int main(int argc, char **argv)
 
 		lightShader->use();
 		glm::mat4 lightMat(1);
-		lightMat = glm::translate(lightMat, glm::vec3(1.0f, 1.0f, 0.5f));
-		lightMat = glm::rotate(lightMat, glm::radians(45.f), glm::vec3(0.5f, 1.0f, 0.0f));
+		lightMat = glm::translate(lightMat, lightSourcePos);
+		//lightMat = glm::rotate(lightMat, glm::radians(45.f), glm::vec3(0.5f, 1.0f, 0.0f));
 		lightMat = glm::scale(lightMat, glm::vec3(0.2, 0.2, 0.2));
 
 		glUniformMatrix4fv(glGetUniformLocation(lightShader->program, "model"), 1, GL_FALSE, glm::value_ptr(lightMat));
 		glUniformMatrix4fv(glGetUniformLocation(lightShader->program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(lightShader->program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	
+		
+
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
