@@ -1,5 +1,7 @@
 ﻿/*
 log：2018-3-10 增加camera class
+
+http://devernay.free.fr/cours/opengl/materials.html  定义了很多材质参数
 */
 #define GLEW_STATIC
 #define STB_IMAGE_IMPLEMENTATION
@@ -275,9 +277,9 @@ int main(int argc, char **argv)
 
 	glEnable(GL_DEPTH_TEST);
 
-	GLint objectColorLoc = glGetUniformLocation(cubeShader->program, "cubeColor");
+	
 	GLint lightColorLoc = glGetUniformLocation(cubeShader->program, "lightColor");
-	glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
+	
 	glUniform3f(lightColorLoc, 1.f, 1.f, 1.f);
 	glBindVertexArray(0);
 
@@ -314,6 +316,27 @@ int main(int argc, char **argv)
 		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z); //lightsource position
 		glUniform3f(glGetUniformLocation(cubeShader->program, "viewPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
 		
+		GLint ambient = glGetUniformLocation(cubeShader->program, "material.ambient");
+		GLint diffuse = glGetUniformLocation(cubeShader->program, "material.diffuse");
+		GLint specular = glGetUniformLocation(cubeShader->program, "material.specular");
+		GLint shininess = glGetUniformLocation(cubeShader->program, "material.shininess");
+
+		glUniform3f(ambient, 1.0f, 0.5f, 0.31f);
+		glUniform3f(diffuse, 1.0f, 0.5f, 0.31f);
+		glUniform3f(specular, 0.5f, 0.5f, 0.5f);
+		glUniform1f(shininess, 32.0f);
+
+		GLint ambientLight = glGetUniformLocation(cubeShader->program, "light.ambient");
+		GLint diffuseLight = glGetUniformLocation(cubeShader->program, "light.diffuse");
+		GLint specularLight = glGetUniformLocation(cubeShader->program, "light.specular");
+		//GLint shininessLight = glGetUniformLocation(cubeShader->program, "material.shininess");
+
+		glUniform3f(ambientLight, 0.2f, 0.2f, 0.2f);
+		glUniform3f(diffuseLight, 0.5f, 0.5f, 0.5f);
+		glUniform3f(specularLight, 1.f, 1.f, 1.f);
+		//glUniform1f(shininess, 32.0f);
+
+
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
