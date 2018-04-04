@@ -24,6 +24,7 @@ enum enumTexture
 {
 	box,
 	face,
+	specularBox,
 };
 float vertices[] = {
 	// positions          // normals           // texture coords
@@ -285,7 +286,13 @@ int main(int argc, char **argv)
 		bool result = diffuseTex->LoadTexture(texPath, enumTexture::box, GL_BGRA, GL_RGBA, 0, 0);
 		if (!result)
 			std::cout << "load pic ERROR" << std::endl;
-		diffuseTex->BindTexture(enumTexture::box);
+		glUniform1i(glGetUniformLocation(cubeShader->program, "material.diffuse"), 0);
+
+		const char* specularTexPath = "imageSource/container2_specular.png";
+		result = diffuseTex->LoadTexture(specularTexPath, enumTexture::specularBox, GL_BGRA, GL_RGBA, 0, 0);
+		if (!result)
+			std::cout << "load pic2 ERROR" << std::endl;
+		glUniform1i(glGetUniformLocation(cubeShader->program, "material.specular"), 1);
 	}
 
 	glEnable(GL_DEPTH_TEST);
@@ -329,8 +336,14 @@ int main(int argc, char **argv)
 
 		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z); //lightsource position
 		glUniform3f(glGetUniformLocation(cubeShader->program, "viewPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
-		glUniform1i(glGetUniformLocation(cubeShader->program, "material.diffuse"), 0);
+		
+		
 		glActiveTexture(GL_TEXTURE0);
+		diffuseTex->BindTexture(enumTexture::box);
+		
+		
+		glActiveTexture(GL_TEXTURE1);
+		diffuseTex->BindTexture(enumTexture::specularBox);
 		GLint ambient = glGetUniformLocation(cubeShader->program, "material.ambient");
 		GLint diffuse = glGetUniformLocation(cubeShader->program, "material.diffuse");
 		GLint specular = glGetUniformLocation(cubeShader->program, "material.specular");
