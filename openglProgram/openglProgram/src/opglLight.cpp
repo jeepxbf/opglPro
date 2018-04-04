@@ -351,9 +351,9 @@ int main(int argc, char **argv)
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		glUniform3f(glGetUniformLocation(cubeShader->program, "light.direction"), lightDirection.x, lightDirection.y, lightDirection.z); //lightsource position
+		//glUniform3f(glGetUniformLocation(cubeShader->program, "light.direction"), lightDirection.x, lightDirection.y, lightDirection.z); //lightsource position
 		glUniform3f(glGetUniformLocation(cubeShader->program, "viewPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
-		
+		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z);
 		
 		glActiveTexture(GL_TEXTURE0);
 		diffuseTex->BindTexture(enumTexture::box);
@@ -374,12 +374,17 @@ int main(int argc, char **argv)
 		GLint ambientLight = glGetUniformLocation(cubeShader->program, "light.ambient");
 		GLint diffuseLight = glGetUniformLocation(cubeShader->program, "light.diffuse");
 		GLint specularLight = glGetUniformLocation(cubeShader->program, "light.specular");
-
+		GLint constantLight = glGetUniformLocation(cubeShader->program, "light.constant");
+		GLint linearLight = glGetUniformLocation(cubeShader->program, "light.linear");
+		GLint quadtaticLight = glGetUniformLocation(cubeShader->program, "light.quadtatic");
 
 		glUniform3f(ambientLight, 0.2f, 0.2f, 0.2f);
 		glUniform3f(diffuseLight, 0.5f, 0.5f, 0.5f);
 		glUniform3f(specularLight, 1.f, 1.f, 1.f);
-
+		//50		1.0		0.09	0.032
+		glUniform1f(constantLight, 1.0);
+		glUniform1f(linearLight, 0.09);
+		glUniform1f(quadtaticLight, 0.032);
 
 
 		glBindVertexArray(lightVAO);

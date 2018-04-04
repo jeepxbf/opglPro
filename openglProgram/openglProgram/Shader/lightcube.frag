@@ -27,9 +27,9 @@ struct Light
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
-	//float constant;
-	//float linear;
-	//float quadratic;
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 uniform Light light;
@@ -37,21 +37,25 @@ uniform Light light;
 in vec2 TexCoords;
 void main()
 {	
-	vec3 lightDir = normalize(-light.direction);
+	
+	float distance = length(lightPos - FragPos);
+	float attenuation  = 1.0/(light.constant + light.linear * distance + light.quadratic * distance * distance);
+
+	//vec3 lightDir = normalize(-light.direction);
 	//环境光
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse,TexCoords));
+	vec3 ambient = attenuation * light.ambient * vec3(texture(material.diffuse,TexCoords));
 
 	//漫反射	
 	vec3 norm = normalize(Normal);
-	//vec3 lightDir = normalize(lightPos - FragPos);
+	vec3 lightDir = normalize(lightPos - FragPos);
 
 	float diff = max(dot(lightDir,norm),0.0);
-	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse,TexCoords));
+	vec3 diffuse = attenuation * light.diffuse * diff * vec3(texture(material.diffuse,TexCoords));
 	//镜面高光
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir,norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0),  material.shininess);
-	vec3 specular = light.specular * spec * vec3(texture(material.specular,TexCoords));
+	vec3 specular = attenuation * light.specular * spec * vec3(texture(material.specular,TexCoords));
 
 	vec3 result = specular + ambient + diffuse;
 	color = vec4(result,1.0);
