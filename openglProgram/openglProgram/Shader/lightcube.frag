@@ -14,8 +14,7 @@ in vec3 FragPos;
 //材质
 struct Material
 {
-	vec3 ambient;
-	vec3 diffuse;
+	sampler2D diffuse;
 	vec3 specular;
 	float shininess;
 };
@@ -31,16 +30,18 @@ struct Light
 };
 uniform Light light;
 
+in vec2 TexCoords;
 void main()
 {	
 	//环境光
-	vec3 ambient = light.ambient * material.ambient * lightColor;
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse,TexCoords));
+
 	//漫反射	
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(lightPos - FragPos);
 
 	float diff = max(dot(lightDir,norm),0.0);
-	vec3 diffuse = light.diffuse * diff * material.diffuse * lightColor;
+	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse,TexCoords));
 	//镜面高光
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir,norm);
