@@ -23,22 +23,27 @@ uniform Material material;
 //光照强度
 struct Light
 {
-	vec3 position;
+	vec3 direction;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+	//float constant;
+	//float linear;
+	//float quadratic;
 };
+
 uniform Light light;
 
 in vec2 TexCoords;
 void main()
 {	
+	vec3 lightDir = normalize(-light.direction);
 	//环境光
 	vec3 ambient = light.ambient * vec3(texture(material.diffuse,TexCoords));
 
 	//漫反射	
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(lightPos - FragPos);
+	//vec3 lightDir = normalize(lightPos - FragPos);
 
 	float diff = max(dot(lightDir,norm),0.0);
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse,TexCoords));

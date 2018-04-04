@@ -2,6 +2,24 @@
 log：2018-3-10 增加camera class
 
 http://devernay.free.fr/cours/opengl/materials.html  定义了很多材质参数
+
+点光源的衰减参数
+F = (1.0)/c + k1*d + k2*d*d   c是常数项，d是距离，k1是一次项，k2是二次项
+我们希望覆盖大约50米的距离，那么我们可以选择距离为50的参数
+距离	常数项	一次项	二次项
+7		1.0		0.7		1.8
+13		1.0		0.35	0.44
+20		1.0		0.22	0.20
+32		1.0		0.14	0.07
+50		1.0		0.09	0.032
+65		1.0		0.07	0.017
+100		1.0		0.045	0.0075
+160		1.0		0.027	0.0028
+200		1.0		0.022	0.0019
+325		1.0		0.014	0.0007
+600		1.0		0.007	0.0002
+3250	1.0		0.0014	0.000007
+
 */
 #define GLEW_STATIC
 #define STB_IMAGE_IMPLEMENTATION
@@ -303,8 +321,9 @@ int main(int argc, char **argv)
 	glUniform3f(lightColorLoc, 1.f, 1.f, 1.f);
 	glBindVertexArray(0);
 
-	const glm::vec3 lightSourcePos(1.f, 0.f, 0.0f);
-
+	const glm::vec3 lightSourcePos(2.f, 2.f, 0.0f);
+	//定向光方向
+	const glm::vec3 lightDirection(-0.2f, -1.0f, -0.3f);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -322,19 +341,17 @@ int main(int argc, char **argv)
 		do_movement();
 
 		cubeShader->use();
-		glm::mat4 model(1);
-		model = glm::rotate(model, glm::radians((GLfloat)glfwGetTime()*50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	
 		//model = glm::rotate(model, glm::radians(-45.0f), glm::vec3(0.f, 1.f, 0.f));
 		glm::mat4 view(1);
 		view = mainCamera.getCamearMatrix();
 		glm::mat4 projection(1);
 		if (viewheight != 0)
 			projection = glm::perspective(glm::radians(45.f), (GLfloat)viewWidth / viewheight, 0.1f, 100.f);
-		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z); //lightsource position
+		glUniform3f(glGetUniformLocation(cubeShader->program, "light.direction"), lightDirection.x, lightDirection.y, lightDirection.z); //lightsource position
 		glUniform3f(glGetUniformLocation(cubeShader->program, "viewPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
 		
 		
@@ -353,25 +370,30 @@ int main(int argc, char **argv)
 		glUniform3f(diffuse, 1.0f, 0.5f, 0.31f);
 		glUniform3f(specular, 0.5f, 0.5f, 0.5f);
 		glUniform1f(shininess, 32.0f);
-/*
-		glUniform3f(ambient, 0.05f, 0.05f, 0.f);
-		glUniform3f(diffuse, 0.5f, 0.5f, 0.4f);
-		glUniform3f(specular,0.7f, 0.7f, 0.04f);
-		glUniform1f(shininess, 0.078125f);*/
 
 		GLint ambientLight = glGetUniformLocation(cubeShader->program, "light.ambient");
 		GLint diffuseLight = glGetUniformLocation(cubeShader->program, "light.diffuse");
 		GLint specularLight = glGetUniformLocation(cubeShader->program, "light.specular");
-		//GLint shininessLight = glGetUniformLocation(cubeShader->program, "material.shininess");
+
 
 		glUniform3f(ambientLight, 0.2f, 0.2f, 0.2f);
 		glUniform3f(diffuseLight, 0.5f, 0.5f, 0.5f);
 		glUniform3f(specularLight, 1.f, 1.f, 1.f);
-		//glUniform1f(shininess, 32.0f);
+
 
 
 		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glm::mat4 model;
+		for (int i = 0; i < 10; i++)
+		{
+			model = glm::mat4(1);
+			model = glm::translate(model, cubePositions[i]);
+			model = glm::rotate(model, glm::radians(20.0f*i), glm::vec3(1.0f, 0.3f, 0.5f));
+			//model = glm::rotate(model, glm::radians((GLfloat)glfwGetTime()*50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(glGetUniformLocation(cubeShader->program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		
 		glBindVertexArray(0);
 		
 
