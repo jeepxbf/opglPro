@@ -20,20 +20,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="class\source\Camera.cpp" />
+    <ClCompile Include="class\source\Mesh.cpp" />
+    <ClCompile Include="class\source\Model.cpp" />
     <ClCompile Include="class\source\Shader.cpp" />
     <ClCompile Include="class\source\TextureManager.cpp" />
-    <ClCompile Include="src\opglLight.cpp" />
+    <ClCompile Include="src\loadModel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\flagmentShader.fs" />
-    <None Include="Shader\lightcube.frag" />
-    <None Include="Shader\lightsource.vert" />
-    <None Include="Shader\lightcube.vert" />
-    <None Include="Shader\lightsource.frag" />
-    <None Include="Shader\vertexShader.vs" />
+    <None Include="Shader\loadModel.frag" />
+    <None Include="Shader\loadModel.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="class\include\Camera.h" />
+    <ClInclude Include="class\include\common.h" />
+    <ClInclude Include="class\include\Mesh.h" />
+    <ClInclude Include="class\include\Model.h" />
     <ClInclude Include="class\include\Shader.h" />
     <ClInclude Include="class\include\TextureManager.h" />
   </ItemGroup>
@@ -98,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>FreeImage.lib;glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;glfw3.lib;opengl32.lib;glew32s.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

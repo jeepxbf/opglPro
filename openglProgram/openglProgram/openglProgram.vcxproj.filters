@@ -30,27 +30,21 @@
     <ClCompile Include="class\source\Camera.cpp">
       <Filter>class</Filter>
     </ClCompile>
-    <ClCompile Include="src\opglLight.cpp">
+    <ClCompile Include="class\source\Mesh.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
+    <ClCompile Include="class\source\Model.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loadModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\vertexShader.vs">
+    <None Include="Shader\loadModel.vert">
       <Filter>shader</Filter>
     </None>
-    <None Include="Shader\flagmentShader.fs">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="Shader\lightcube.frag">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="Shader\lightsource.vert">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="Shader\lightcube.vert">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="Shader\lightsource.frag">
+    <None Include="Shader\loadModel.frag">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
@@ -62,6 +56,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="class\include\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="class\include\Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="class\include\common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="class\include\Model.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

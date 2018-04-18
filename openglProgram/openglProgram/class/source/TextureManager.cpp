@@ -153,3 +153,12 @@ void TextureManager::UnloadAllTextures()
 	//clear the texture map
 	m_texID.clear();
 }
+
+GLuint TextureManager::LoadTextureFromFile(const char* filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+{
+	if (LoadTexture(filename, texID, image_format, internal_format, level, border))
+	{		
+		return m_texID[texID];		
+	}
+	return 0;
+}

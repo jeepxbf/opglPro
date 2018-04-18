@@ -36,14 +36,9 @@ F = (1.0)/c + k1*d + k2*d*d   c是常数项，d是距离，k1是一次项，k2�
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
-
+#include "common.h"
 #include "Camera.h"
-enum enumTexture
-{
-	box,
-	face,
-	specularBox,
-};
+
 float vertices[] = {
 	// positions          // normals           // texture coords
 	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
@@ -353,12 +348,11 @@ int main(int argc, char **argv)
 
 		//glUniform3f(glGetUniformLocation(cubeShader->program, "light.direction"), lightDirection.x, lightDirection.y, lightDirection.z); //lightsource position
 		glUniform3f(glGetUniformLocation(cubeShader->program, "viewPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
-		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z);
-		
+		//glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), lightSourcePos.x, lightSourcePos.y, lightSourcePos.z);
+		glUniform3f(glGetUniformLocation(cubeShader->program, "lightPos"), mainCamera.cameraPosition.x, mainCamera.cameraPosition.y, mainCamera.cameraPosition.z);
+		//设置材质
 		glActiveTexture(GL_TEXTURE0);
-		diffuseTex->BindTexture(enumTexture::box);
-		
-		
+		diffuseTex->BindTexture(enumTexture::box);		
 		glActiveTexture(GL_TEXTURE1);
 		diffuseTex->BindTexture(enumTexture::specularBox);
 		GLint ambient = glGetUniformLocation(cubeShader->program, "material.ambient");
@@ -370,22 +364,29 @@ int main(int argc, char **argv)
 		glUniform3f(diffuse, 1.0f, 0.5f, 0.31f);
 		glUniform3f(specular, 0.5f, 0.5f, 0.5f);
 		glUniform1f(shininess, 32.0f);
-
+		//设置光源
 		GLint ambientLight = glGetUniformLocation(cubeShader->program, "light.ambient");
 		GLint diffuseLight = glGetUniformLocation(cubeShader->program, "light.diffuse");
 		GLint specularLight = glGetUniformLocation(cubeShader->program, "light.specular");
-		GLint constantLight = glGetUniformLocation(cubeShader->program, "light.constant");
-		GLint linearLight = glGetUniformLocation(cubeShader->program, "light.linear");
-		GLint quadtaticLight = glGetUniformLocation(cubeShader->program, "light.quadtatic");
-
 		glUniform3f(ambientLight, 0.2f, 0.2f, 0.2f);
 		glUniform3f(diffuseLight, 0.5f, 0.5f, 0.5f);
 		glUniform3f(specularLight, 1.f, 1.f, 1.f);
-		//50		1.0		0.09	0.032
-		glUniform1f(constantLight, 1.0);
-		glUniform1f(linearLight, 0.09);
-		glUniform1f(quadtaticLight, 0.032);
 
+		//设置定向光衰减
+		//GLint constantLight = glGetUniformLocation(cubeShader->program, "light.constant");
+		//GLint linearLight = glGetUniformLocation(cubeShader->program, "light.linear");
+		//GLint quadtaticLight = glGetUniformLocation(cubeShader->program, "light.quadtatic");
+		//50		1.0		0.09	0.032
+		/*glUniform1f(constantLight, 1.0);
+		glUniform1f(linearLight, 0.09);
+		glUniform1f(quadtaticLight, 0.032);*/
+		
+		//设置手电筒光
+		GLint lightDir = glGetUniformLocation(cubeShader->program, "light.direction");
+		GLint lightCutOff = glGetUniformLocation(cubeShader->program, "light.cutOff");
+		GLint lightOuterCutOff = glGetUniformLocation(cubeShader->program, "light.outerCutOff");
+		glUniform3f(lightDir, mainCamera.cameraRight.x, mainCamera.cameraRight.y, mainCamera.cameraRight.y);
+		glUniform1f(lightCutOff, glm::cos(glm::radians(12.5)));
 
 		glBindVertexArray(lightVAO);
 		glm::mat4 model;
